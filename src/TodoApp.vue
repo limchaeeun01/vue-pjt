@@ -1,13 +1,17 @@
 <template>
   <div class="container">
     <h2>To-Do List Page</h2>
+
+    <TodoSearch @search-todo="filteredTodos"/>
+
+
     <TodoSimpleForm @add-todo="addTodo"/>
 
     <div v-if="todos.length==0" style="color : red;">
         추가된 일정이 없습니다.
     </div>
 
-    <TodoList :todos="todos"
+    <TodoList :todos="filterTodos"
             @toggle-todo="toggleTodo"
             @delete-todo="onDelete"/>
 
@@ -16,16 +20,33 @@
 </template>
 
 <script>
-import {ref} from 'vue';
+import {ref, computed} from 'vue';
 import TodoSimpleForm from './components/TodoSimpleForm.vue';
 import TodoList from './components/TodoList.vue';
+import TodoSearch from './components/TodoSearch.vue';
 export default {
     components : {
         TodoSimpleForm,
-        TodoList
+        TodoList,
+        TodoSearch
     },
     setup(){
         const todos = ref([]);
+        const search = ref('');
+
+        const filteredTodos = (searchTxt) => {
+            search.value = searchTxt.value;
+            console.log("debug >>> filteredTodos searchTxt, ", search.value);
+        };
+
+        const filterTodos = computed(() => {
+            if(search.value){
+                return todos.value.filter( todo => {
+                    return todo.subject.includes(search.value);
+                })
+            }
+            return todos.value;
+        });
 
         const todoStyle = {
             textDecoration : 'line-through',
@@ -53,9 +74,11 @@ export default {
         return{
             todos,
             todoStyle,
+            filterTodos,
             addTodo,
             onDelete,
-            toggleTodo
+            toggleTodo,
+            filteredTodos
         }
     }
 

@@ -22,6 +22,7 @@
 <script>
 import {ref} from 'vue';
 export default {
+
     setup(props, context){
         const todo = ref('');
         const hasError = ref(false);
