@@ -8,7 +8,8 @@
     </div>
 
     <TodoList :todos="todos"
-            @toggle-todo="toggleTodo"/>
+            @toggle-todo="toggleTodo"
+            @delete-todo="onDelete"/>
 
 
   </div>
@@ -31,7 +32,6 @@ export default {
             color : 'gray'
         }
 
-
         const addTodo = (data) => {
             console.log("debug >>> form emit data addTodo, ", data);
             todos.value.push(data);
@@ -48,6 +48,8 @@ export default {
             todos.value[index].completed = !todos.value[index].completed;
             console.log("debug >>> toggleTodo after, ", todos.value[index]);
         }
+
+
         return{
             todos,
             todoStyle,
